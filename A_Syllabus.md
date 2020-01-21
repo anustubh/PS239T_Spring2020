@@ -20,25 +20,24 @@ Please note that materials are still in development, and will be changing.
 ## Logistics
 
 ### Instructor
+Anustubh Agnihotri
+
+anustubh@berkeley.edu
+
+
+### Section Assistant
 
 Julia Christensen
 
 jbchristensen@berkeley.edu
 
-### Section Assistant
-
-Anustubh Agnihotri
-
-anustubh@berkeley.edu
-
 ### Times 
 
-Monday 2-4 pm
-Wednesday 2-4 pm
+Wednesday 2-4 pm 
 
 ### Location
 
-122 Barrows
+110 Barrows
 
 ### Office Hours
 
@@ -50,7 +49,7 @@ We will use bCourses for communication (announcements and questions) and turning
 
 ### GitHub
 
-All course materials will be posted on Github at https://github.com/juliachristensen/PS239T_Fall2019, including class notes, code demonstrations, sample data, and assignments. Students are required to use GitHub for their final projects, which will be publicly available, unless they have special considerations (e.g. proprietary data). 
+All course materials will be posted on Github at https://github.com/anustubh/PS239T_Spring2020/, including class notes, code demonstrations, sample data, and assignments. Students are required to use GitHub for their final projects, which will be publicly available, unless they have special considerations (e.g. proprietary data). 
 
 ### Accessibility
 
