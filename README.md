@@ -9,4 +9,4 @@ Please note that materials are still in development, and will be changing.
 
 ## Contact
 
-Instructor: Julia Christensen, jbchristensen@berkeley.edu
+Instructor: Anustubh Agnihotri, anustubh@berkeley.edu
