@@ -68,21 +68,17 @@ Weekly assignments will be due as follows:
 
 | Date				| Assignment				|
 | ----------------------------- | ----------------------------- 	|
-| Thursday, August 29		| Fill out survey 			|
-| Tuesday, September 3 		| Bash/Unix/Git Online Tutorial 	| 
-| Wednesday, September 4	| Submit proof of installation 		| 
-| Sunday, September 8		| R datacamp tutorial(s)		| 
-| Sunday, September 15		| Tidyverse R datacamp tutorial(s)	| 
-| Sunday, September 17		| Python datacamp tutorial(s)		| 
-| Sunday, September 22		| Python datacamp tutorial(s)		| 
-| Sunday, September 29		| Database exploration 			|
-| Sunday, October 6		| Final project proposal		|
-| Sunday, October 13		| API/Webscraping project		|
-| Sunday, October 20		| Data cleaning project			|
-| Sunday, October 27		| Data visualization project		|
-| Sunday, November 3		| Final project update			|
-| November 25-December 4	| Final project presentations		| 
-| Wednesday, December 11	| Final projects due 			| 
+| January 22nd		| Fill out survey 			|
+| January 29th 		| Submit proof of installation 	| 
+| February 3rd		| R tutorial	| 
+| February 10th		| Python tutorial	| 
+| February 24th		| Final project proposal		|
+| March	4th		| Webscraping assignment		|
+| March 24th		| API assignment			|
+| April	14th	| Data cleaning+visualization project		|
+| April 21st		| Final project update			|
+| May 1st week	| Final project presentations		| 
+| May 11th	| Final projects due 			| 
 
 Assignment details can be found on bcourses. Unless otherwise specified, assignments should be turned in as **pdf documents** via the bCourses site. 
 
@@ -123,35 +119,21 @@ Both Monday and Wednesday classes will be required. Instead of separate lectures
 
 | Date				| Topic				| Instructor	|
 | ----------------------------- | ----------------------------- | ------------- |
-| Wednesday, August 28		| Introduction 			| Julia 	| 
-| Monday, September 2		| No class		 	| n/a	 	|
-| Wednesday, September 4 	| Bash/Unix/Git  		| Julia		| 
-| Monday, September 9		| Intro to R		 	| Julia 	| 
-| Wednesday, September 11	| Intro to R		 	| Julia 	| 
-| Monday, September 16		| Intro to R		 	| Julia 	| 
-| Wednesday, September 18	| Intro to Python	 	| Anustubh 	| 
-| Monday, September 23		| Intro to Python	  	| Anustubh 	| 
-| Wednesday, September 25	| Intro to Python	 	| Anustubh 	| 
-| Monday, September 30		| APIs			  	| Julia		| 
-| Wednesday, October 2		| HTML + Intro to webscraping  	| Julia		| 
-| Monday, October 7		| Webscraping	  	  	| Anustubh 	| 
-| Wednesday, October 9		| Webscraping	  	 	| Anustubh 	|
-| Monday, October 14		| Data Cleaning	  		| Julia		| 
-| Wednesday, October 16		| Data Cleaning	 		| Anustubh 	|
-| Monday, October 21		| Data Visualization		| Julia		| 
-| Wednesday, October 23		| Data Visualization		| Julia		|
-| Monday, October 28		| Organization & Collaboration	| Anustubh 	| 
-| Wednesday, October 30		| Micro-lectures		| TBD		|
-| Monday, November 4		| Micro-lectures		| TBD		|
-| Wednesday, November 6		| Text analysis			| TBD		|
-| Monday, November 11		| No class			| n/a		|
-| Wednesday, November 13	| Text analysis			| TBD		|
-| Monday, November 18		| Machine Learning		| TBD		|
-| Wednesday, November 20	| Machine Learning		| Chris Kennedy |
-| Monday, November 25		| Presentations			| n/a		|
-| Wednesday, November 27	| No class			| n/a		|
-| Monday, December 2		| Presentations			| n/a		|
-| Wednesday, December 4		| Presentations			| n/a		|
+| Janaury 22nd		| Introduction 			| Anustubh 	| 
+| Janaury 29th	| Bash/Unix/Git + Intro to R		 	| Julia	 	|
+| February 5th 	| Intro to R	  		| Julia		| 
+| February 12th	| Intro to Python		 	| Anustubh 	| 
+| February 19th	| Intro to Python		 	| Anustubh 	| 
+| February 26th		| HTML + Webscraping		 	| Julia 	| 
+| March	4th | Webscraping	 	| Anustubh 	| 
+| March	11th		| APIs	  	| Julia 	| 
+| March	18th	| Data Cleaning	 	| Anustubh + Julia	| 
+| April	1st	| Data Visualization			  	| Julia		| 
+| April	8th		| Organization & Collaboration + Guest Lecture on Social Network  	| Anustubh		| 
+| April	15th		| Text Analysis	  	  	| Anustubh 	| 
+| April	22nd	| Text Analysis + Machine Learning	  	 	| Anustubh 	|
+| April	29th		| Machine Learning	  		| Anustubh		| 
+
 
 ## Computer Requirements
 
