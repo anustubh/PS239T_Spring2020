@@ -129,7 +129,7 @@ Both Monday and Wednesday classes will be required. Instead of separate lectures
 | March	11th		| APIs	  	| Julia 	| 
 | March	18th	| Data Cleaning	 	| Anustubh + Julia	| 
 | April	1st	| Data Visualization			  	| Julia		| 
-| April	8th		| Organization & Collaboration + Guest Lecture on Social Network  	| Anustubh		| 
+| April	8th		| Organization & Collaboration + Guest Lecture	| Anustubh		| 
 | April	15th		| Text Analysis	  	  	| Anustubh 	| 
 | April	22nd	| Text Analysis + Machine Learning	  	 	| Anustubh 	|
 | April	29th		| Machine Learning	  		| Anustubh		| 
