@@ -40,11 +40,11 @@ When we want to use commands from a program like git (or R, or python, etc.), we
 > Mini-challenge:  
 > Recall that when we cloned the course repository, we used the following line of code: 
 > ```{shell}
-> $ git clone https://github.com/juliachristensen/PS239T_Fall2019`
+> $ git clone https://github.com/anustubh/PS239T_Spring2020
 > ```
 > Now, see what happens when we forget to add `git` before the command: 
 > ```{shell}
-> $ clone https://github.com/juliachristensen/PS239T_Fall2019`
+> $ clone https://github.com/anustubh/PS239T_Spring2020
 > ```
 > What happens? 
 
