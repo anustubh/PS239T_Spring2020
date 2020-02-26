@@ -1,7 +1,7 @@
 Webscraping
 ========================================================
 author: PS239T
-date: Spring 2018
+date: Spring 2020
 autosize: TRUE
 
 Learning Objectives
@@ -23,7 +23,7 @@ Why Webscrape?
 
 * Two kinds of ways to get data off the web
 	* Webscraping - i.e. user-facing websites for humans (this week)
-	* APIs - i.e. application-facing, for computers (two weeks ago)
+	* APIs - i.e. application-facing, for computers (two weeks later)
 
 Webscraping: Pros and Cons
 ========================================================
@@ -46,43 +46,11 @@ Webscraping: Pros and Cons
      - *If* the site allows you to do so, scrape. 
      - Wikipedia and IMDB both allow scraping, so those are easy sites to start with.
      
-A Quick Example (Part 1)
-========================================================
-Let's say we want to scrape Wikipedia:
-
-![wikipedia](img/wiki_screenshot.png)
-
-
-A Quick Example (Part 2)
-========================================================
-``` {r scraping, eval=F}
-library(rvest)
-sdata <- read_html("http://en.wikipedia.org/wiki/Table_(information)")
-# read_html reads the source code into an r format for us
-results <- html_node(sdata, css = ".wikitable")
-# ".wikitable" is a CSS selector which says: "grab nodes (aka elements) with class wikitable".
-html_table(results)
-# html_table() converts a single <table> node to a data frame.
-```
-
-
-A Quick Example (Part 3)
-========================================================
-``` {r output, echo=F}
-library(rvest)
-sdata <- read_html("http://en.wikipedia.org/wiki/Table_(information)")
-# read_html reads the source code into an r format for us
-results <- html_node(sdata, css = ".wikitable")
-# ".wikitable" is a CSS selector which says: "grab nodes (aka elements) with class wikitable".
-html_table(results)
-# html_table() converts a single <table> node to a data frame.
-```
 
 Some Disclaimers
 ========================================================
 
 * Check a site's terms and conditions before scraping.
-* Check the source code for `robots.txt` - this may tell you that scraping is disallowed.
 * Be nice - don't hammer the site's server.
 * Sites change their layout all the time. Your scraper will break.
 
