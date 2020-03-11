@@ -73,7 +73,7 @@ Weekly assignments will be due as follows:
 | February 3rd		| R tutorial	| 
 | February 10th		| Python tutorial	| 
 | February 24th		| Final project proposal		|
-| March	4th		| Webscraping assignment		|
+| March	9th		| Webscraping assignment		|
 | March 24th		| API assignment			|
 | April	14th	| Data cleaning+visualization project		|
 | April 21st		| Final project update			|
