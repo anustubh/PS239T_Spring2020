@@ -45,7 +45,9 @@ pacman::p_load(
   tidyverse, #dplyr, readr, etc.
   magrittr, #%<>% operator
   httr,
-  jsonlite
+  jsonlite, 
+  ggplot2,
+  update = FALSE
 )
 ```
 
@@ -65,7 +67,7 @@ install_github("trinker/pacman")
 I have saved my API keys in the subfolder 'api_keys_jbc', but you don't see that folder in my github repo. That is because I added this subfolder the the .gitignore file. 
 ```{r}
 # Detmine if running on Julia's computer
-julia_computer = (getwd()=="C:/Users/Julia/OneDrive/Documents/Berkeley/2019-08_Fall/PS239T_Fall2019/05_APIs")
+julia_computer = (getwd()=="C:/Users/Julia/OneDrive/Documents/Berkeley/2020-01_Spring/PS239T_Spring2020/05_APIs")
 
 # If so, read API keys from her subfolder (hidden from you b/c it's listed in the .gitignore file)
 if(julia_computer==TRUE) source("api_keys_jbc/01_api_keys_nyt_r.R")
@@ -90,7 +92,7 @@ In the first place, we know that every call will require us to provide a) a base
 ```{r}
 # Create objects holding the key, base url, and response format
 key<-nyt_key_1
-base.url<-"http://api.nytimes.com/svc/search/v2/articlesearch"
+base.url<-"https://api.nytimes.com/svc/search/v2/articlesearch"
 response.format<-".json"
 ```
 
@@ -203,8 +205,8 @@ Now that we have our handy NYT API function, let's try and do some data analysis
 ```{r}
 # Get number of hits, number of page queries
 impeachment<-nytapi(search.terms = "impeachment", 
-                    begin.date = 20190901, end.date = 20190930, 
-                    key=nyt_key_1)
+                    begin.date = 20200101, end.date = 20200107, 
+                    key=key)
 hits<-impeachment$response$meta$hits
 print(hits)
 total_pages <- ceiling(hits/10) %>% print()
@@ -217,10 +219,10 @@ impeachment.articles<-sapply(X = 0:total_pages, FUN = function(page){
   #cat(page, "")
   response<-tryCatch(expr = {
     r<-nytapi(search.terms = "impeachment", 
-              begin.date = 20190901, 
-              end.date = 20190930, 
+              begin.date = 20200101, 
+              end.date = 20200107, 
               page = page, 
-              key = nyt_key_1)
+              key = key)
     r$response$docs
   }, error=function(e) NULL)
   Sys.sleep(7) #sleep 7 seconds
@@ -274,7 +276,7 @@ ggplot(data = impeachment.perday,
        aes(x = year.day, y = daily.articles)) +
   geom_point() +
   theme_ed + 
-  xlab(label = "Day of September 2019") +
+  xlab(label = "Day of January 2020") +
   ylab(label = "Article Count") +
   ggtitle(label = "Coverage of Impeachment")
 ```
@@ -299,7 +301,8 @@ res.articles<-sapply(X = 0:total_pages, FUN = function(page){
     r<-nytapi(search.terms = "___________", begin.date = ________, end.date = ________, page = page, key=key)
     r$response$docs
   }, error=function(e) NULL)
-  Sys.sleep(10) #sleep 10 seconds
+  Sys.sleep(7) #sleep 7 seconds
+  print(paste0("Finished page ",page,"."))
   return(response)
 })
 
