@@ -1,0 +1,254 @@
+---
+title: 'Manipulating Strings through stringr'
+author: "PS239T"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    df_print: paged
+    theme: flatly
+    highlight: pygments
+---
+
+# 0) Setup environment
+
+```{r}
+# Remove all objects
+rm(list=ls())
+
+# Load packages
+pacman::p_load(
+  tidyverse,
+  magrittr #piping
+)
+```
+
+**********************************************************
+
+# 1) Strings {#strings}
+
+## 1.1. Intro to Operations on Strings
+
+```{r}
+# Example strings
+firstName <- "Julia Bitz"
+lastName <- "Christensen"
+```
+
+Unlike in Python, R does not have a reserved operator for string concatenation such as `+`.  Furthermore, using the usual concatenation operator ```c()``` on two or more character strings will not create a single character string, but rather a **vector** of character strings. 
+
+```{r}
+# Combine strings into vector length 2
+fullName <- c(firstName, lastName) %>% print()
+length(fullName)
+```
+
+In order to combine two or more character strings into one larger character string, we use the ```paste()``` function.  This function takes character strings or vectors and collapses their values into a single character string, with each value separated by a character string selected by the user.
+
+```{r}
+# Paste without space
+fullName <- paste0(firstName, lastName) %>% print()
+
+# Default paste option (adds space)
+fullName <- paste(firstName, lastName) %>% print()
+
+# Paste with different seperators 
+fullName <- paste(firstName, lastName, sep = "+") %>% print() #useful for regression models
+fullName <- paste(firstName, lastName, sep = "___") %>% print()
+```
+
+As with Python, R can also extract substrings based on the index position of its characters.  There are, however, two critical differences.  First, **index positions in R start at 1**.  This is in contrast to Python, where indexation starts at 0.  
+
+Second, **object subsets using index positions in R contain all the elements in the specified range**.  If some object called ```data``` contains five elements, ```data[2:4]``` will return the elements at the second, third, and fourth positions.  By contrast, the same subset in Python would return the objects at the third and fourth positions (or second and third positions, depending upon whether your index starts at 0 or 1).  
+
+Third, **R does not allow indexing of character strings***. Instead, you must use the ```substr()``` function.  Note that this function must receive both the ```start``` and ```stop``` arguments.  So if you want to get all the characters between some index and the end of the string, you must make use of the ```nchar()``` function, which will tell you the length of a character string.
+
+```{r}
+# Save full name variable 
+fullName <- paste(firstName, lastName)
+
+# Note this won't work like in Python
+fullName[1] # R sees the string as a unitary object - it can't be indexed this way
+fullName[1:4] 
+
+# So use this instead 
+stringr::str_sub(fullName, 1, 2)
+
+# Note, this is the equivilent type of subsetting in baser
+substr(x = fullName, start = 1, stop = 2)
+substr(x = fullName, start = 5, stop = 5)
+substr(x = fullName, start = 1, stop = 10)
+substr(x = fullName, start = 11, stop = nchar(fullName))
+```
+
+## 1.2. Character String Functions
+
+Like Python, R has a number of string functions, though these exist as individual rather than "mix-and-match" functions. For example:
+
+```{r}
+
+# Note: tidyverse functions are often faster than base r functions
+
+### Example: upper/lower case conversion
+
+# base r
+start.time <- Sys.time() #start clock
+toupper(x = fullName)
+tolower(x = fullName)
+(Sys.time() - start.time) %>% print() #time elapsed 
+
+# stringr
+start.time <- Sys.time() #start clock
+str_to_upper(fullName)
+str_to_lower(fullName)
+(Sys.time() - start.time) %>% print() #time elapsed 
+
+### Example: splitting strings
+
+# base r
+start.time <- Sys.time() #start clock
+strsplit(x = fullName, split = " ")
+strsplit(x = fullName, split = "i")
+(Sys.time() - start.time) %>% print() #time elapsed 
+
+# stringr
+start.time <- Sys.time() #start clock
+str_split(fullName, pattern = " ")
+str_split(fullName, pattern = "i")
+(Sys.time() - start.time) %>% print() #time elapsed 
+
+```
+
+```{r}
+
+# Note: Base r has some common functions for pattern matching and replacement; these are often useful 
+# - grep, grepl, regexpr, gregexpr and regexec search for matches to argument pattern within each element of a character vector: they differ in the format of and amount of detail in the results.
+# - sub and gsub perform replacement of the first and all matches respectively.
+
+### Example: gsub
+
+# ?gsub
+
+gsub(pattern = "Kim", replacement = "Choi", x = fullName)
+gsub(pattern = "Jae Yeon", replacement = "Danny", x = fullName)
+
+# Note the importance of cases! This doesn't throw an error, so you won't realize your function didn't work unless you double-check several entries 
+
+gsub(pattern = " ", replacement = "", x = fullName) # The same function is used for replacements and stripping
+```
+
+## 1.3. Exercises {.tabset}
+
+The following exercises are adapted from https://www.r-exercises.com/2018/01/22/stringr-basic-functions-exercises/. 
+
+### Questions
+
+1. Load (and install) the stringr and gapminder package. For a warm up, create a new data frame called df that contains only the columns for country name and continent from the gapminder dataset. (Use either base R or dplyr select function). Then filter to only include the unique country-continent combinations. 
+```{r}
+
+```
+
+2. Use a `stringr` function and the `mean()` function to find the average number of characters in the country names. 
+```{r}
+
+```
+
+3. Extract the first and last letter of each country’s name and save as new columns called 'first_letter' and 'last_letter'. 
+```{r}
+
+```
+
+4. What countries have the word “and” as part of their name?
+```{r}
+
+```
+
+5. Delete all instances of "," and "." from the country names and save as new variable called 'country_clean'. 
+```{r}
+
+```
+
+
+### Hints
+
+1. Hint: filter for unique rows using (don't use base R)
+```{r, eval=F}
+df %<>% distinct()
+
+# or 
+df <- distinct(df) 
+```
+
+2. Hint: 
+```{r, eval=F}
+?str_length
+```
+
+5. Hint: 
+```{r, eval=F}
+?str_replace
+?str_replace_all
+
+# Check difference between these two options:
+str_replace_all(df$country, ".", "") %>% head()
+str_replace_all(df$country, fixed("."), "") %>% head()
+```
+
+
+### Answers 
+
+1. Answer: 
+```{r, eval=F}
+# Load packages
+pacman::p_load(stringr, gapminder)
+
+# Check data type
+is.data.frame(gapminder)
+
+# Glimpse gapminder data
+gapminder %>% glimpse()
+
+# Subset and filter for unique rows
+df <- gapminder %>% 
+  dplyr::select(country, continent) %>%
+  dplyr::distinct()
+
+# Glimpse new data (note obs number)
+glimpse(df)
+```
+
+2. Answer: 
+```{r, eval=F}
+mean(str_length(df$country))
+```
+
+3. Answer: 
+```{r, eval=F}
+# Option 1 (baser)
+df$first_letter <- str_sub(df$country, 1, 1)
+df$last_letter <- str_sub(df$country, -1, -1)
+
+# Option 2 (tidyverse)
+df %<>%
+  dplyr::mutate(first_letter = str_sub(country, 1, 1), 
+                last_letter = str_sub(country, -1, -1) )
+```
+
+4. Answer: 
+```{r, eval=F}
+df %>% filter(str_detect(country," and "))
+```
+
+5. Answer: 
+```{r, eval=F}
+# Option 1 (baser) 
+df$country_clean <- str_replace_all(df$country, fixed("."), "")
+df$country_clean <- str_replace_all(df$country_clean, fixed(","), "")
+
+# Option 2 (tidyverse)
+df %<>%
+  mutate(country_clean = str_replace_all(country, fixed(","), "")) %>%
+  mutate(country_clean = str_replace_all(country_clean, fixed("."), "")) 
+```

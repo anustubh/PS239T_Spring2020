@@ -41,9 +41,9 @@ pacman::p_load(
   foreign, #load data types including stata .dta files 
   magrittr, #%<>% operator
   skimr, #for summerising
-  kable, #pretty tables
   stargazer, #pretty tables 
-  xtable #pretty tables 
+  xtable, #pretty tables 
+  knitr #pretty tables (kable)
 )
 ```
 
@@ -60,20 +60,29 @@ load("../data/fl_shooting_data_clean.RData")
 What do you want to summarise? 
 
 ```{r}
+# First, take a quick look at the data again to 
 fl_shootings %>% glimpse()
 
-fl_shootings %>% 
-  group_by(race) %>%
-  summarise(avg=mean(fatality, na.rm=T),
-            sd=sd(fatality, na.rm=T))
+# Now, let's choose some examples 
 
-fl_shootings %>% 
-  summarise_if(is.numeric, mean, na.rm=T)
 
-fl_shootings %>% 
-  group_by(city_name, weapon_cat) %>%
-  summarise(n=n()) %>%
-  spread(key=weapon_cat, value=n)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ```
 
 
@@ -164,6 +173,8 @@ lm1 %>% stargazer(type = "text", title="OLS Example", digits=3,
 # Generate LaTex version of stargazer output 
 lm1 %>% stargazer()
 ```
+
+## 5.2. xtable 
 
 ```{r}
 # Frequency of weapons 

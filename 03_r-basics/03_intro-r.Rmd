@@ -69,6 +69,7 @@ Variable names can only contain letters, numbers, the underscore character, and 
 
 In R, the contents of an object can be printed by either simply executing the the object name or calling the ```print()``` function.
 
+
 ### 1.6. Help 
 
 * `?` + object opens a help page for that specific object
@@ -135,6 +136,11 @@ data.frame(abbreviation = state.abb,
            name = state.name, 
            region = state.region) %>%
   summary()
+
+data.frame(abbreviation = state.abb, 
+           name = state.name, 
+           region = state.region) %>%
+  summary()
 ```
 
 Pipes automatically assign the output of the code to the left of the pipe as the first argument in the following function. If you want to assign the output to a different argument, you can use the period symbol (.).
@@ -164,7 +170,7 @@ library(dplyr) #tidyverse data manipulation
 library(gapminder) #includes gapminder dataset 
 
 # Print random sample of 10 rows 
-gapminder %>%  sample_n(size=10) 
+gapminder %>% sample_n(size=10) 
 
 # Calc avg gdpPercap by country 
 gapminder %>%

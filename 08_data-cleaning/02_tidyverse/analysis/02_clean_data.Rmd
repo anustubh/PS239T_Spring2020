@@ -86,6 +86,10 @@ fl_shootings %>%
 
 In your data cleaning assignment, you may need to generate new variables with different data types in order to show that you know how to manipulate character, logical, numeric, integer, and factor variables. 
 ```{r}
+# Check types & preview 
+fl_shootings %>% select(suspect_mentally_ill, race, condition) %>% glimpse()
+
+# Add/convert variables 
 fl_shootings %<>%
   # Convert suspect_mentally_ill to logical type  
   mutate(suspect_mentally_ill = as.logical(toupper(suspect_mentally_ill))) %>%
@@ -93,16 +97,26 @@ fl_shootings %<>%
   mutate(race = as.factor(race)) %>% 
   # Create binary variable for suicide 
   mutate(is_suicide = ifelse(condition == "suicide", T, F))
+
+# Check types & preview 
+fl_shootings %>% select(suspect_mentally_ill, race, is_suicide) %>% glimpse()
 ```
 
 ## 2.3. Date variable 
 ```{r}
+# Check types & preview 
+fl_shootings %>% select(date) %>% glimpse()
+
+# Convert/add variables 
 fl_shootings %<>%
   # Convert date variable to date type
   mutate(date_orig = date,
          date = lubridate::mdy(date_orig)) %>%
   # Add year variable 
   mutate(year = year(date))
+
+# Check types & preview 
+fl_shootings %>% select(date, date_orig, year) %>% glimpse()
 ```
 
 ## 2.4. Aggregate variable
@@ -112,6 +126,10 @@ fl_shootings %<>%
   group_by(city_id, year) %>%
   mutate(total_people_city_year = n()) %>% 
   ungroup()
+
+# Check aggregation 
+fl_shootings %>% select(city_id, year, total_people_city_year) %>% 
+  sample_n(100) %>% arrange(city_id, year)
 ```
 
 ## 2.5. Recode categorical variable 
@@ -129,14 +147,24 @@ fl_shootings %<>%
          weapon_cat = ifelse(weapon_choices %in% c("Other", "Unclear from report"), "other", weapon_cat),
          weapon_cat = ifelse(weapon_choices %in% c("Toy weapon" , "Unarmed"), "unarmed", weapon_cat),
          weapon_cat = ifelse(weapon_choices %in% c("Vehicle"), "vehicle", weapon_cat))
+
+# Check types & preview 
+fl_shootings %>% select(weapon_choices, weapon_cat) %>% glimpse()
+
+# Check unique combinations 
+fl_shootings %>% distinct(weapon_choices, weapon_cat)
 ```
 
 ## 2.6. Add indicators 
 ```{r}
+# Add race binary vars 
 fl_shootings %<>% 
   mutate(black = ifelse(race=="Blk", 1, 0),
          white = ifelse(race=="Wh", 1, 0),
          other_race = ifelse(!race %in% c("Blk", "Wh"), 1, 0))
+
+# Check types & preview 
+fl_shootings %>% select(race, white, black, other_race) %>% sample_n(30)
 ```
 
 

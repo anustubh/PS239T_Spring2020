@@ -226,7 +226,7 @@ str(c("a", 1))
 
 ```{r, eval = FALSE}
 c(1.7, "a") 
-c(TRUE, 2) 
+c(TRUE, 2)
 c("a", TRUE) 
 ```
 
@@ -279,6 +279,8 @@ as.logical(x)
 # 3. Add the element "11" to the end of the vector
 
 # 4. Coerce it back to a numeric vector.
+
+
 ```
 
 
@@ -291,7 +293,7 @@ Lists are also vectors, but different from atomic vectors because their elements
 Lists are sometimes called recursive vectors, because a list can contain other lists. This makes them fundamentally different from atomic vectors. 
 
 ```{r, eval = TRUE}
-x <- list(1, "a", TRUE, c(4, 5, 6))
+x <- list(c(1,2), "a", TRUE, c(4, 5, 6))
 x
 ```
 
@@ -325,6 +327,7 @@ Lists are used to build up many of the more complicated data structures in R. Fo
 
 ```{r}
 is.list(mtcars)
+str(mtcars)
 
 mod <- lm(mpg ~ wt, data = mtcars)
 

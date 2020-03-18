@@ -32,7 +32,7 @@ rm(list=ls())
 # install.packages("pacman")  
 
 # # Alternate installation 
-# install.packages("pacman", "devtools")  
+# install.packages("pacman", "devtools")
 # library(devtools)
 # install_github("trinker/pacman")
 
@@ -470,6 +470,8 @@ We can use even easier-to-read syntax using the chain or pipe operator (`%>%`), 
 count.region <- country.year %>% # put the dataset you want to work within here
   group_by(region)  %>% # next we have our grouping function
   summarise(region.sum = sum(nyt.count, na.rm=T)) # now we name our new variable and specify the function to run
+
+
 count.region
 
 ```
@@ -481,7 +483,7 @@ count.region.year <- country.year %>%
   group_by(region, year)  %>% 
   summarise(nyt.count = sum(nyt.count, na.rm=T)) 
 
-country.year
+count.region.year
 ```
 
 Another very useful function is **arrange**, which orders a data frame on the basis of column contents.

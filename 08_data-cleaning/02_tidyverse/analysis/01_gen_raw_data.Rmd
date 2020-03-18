@@ -46,7 +46,7 @@ pacman::p_load(
 
 ## 1.2. Check wd
 
-Make sure that your working directory is PS239T_Fall2019/08_data-cleaning/02_tidyverse/analysis
+Make sure that your working directory is PS239T_Spring2020/08_data-cleaning/02_tidyverse/analysis
 ```{r}
 getwd()
 ```
@@ -122,6 +122,16 @@ fl_shootings <- left_join(x = fl_shootings,
                           y = cities,
                           by = "city_id")
 ```
+
+The following website is a good way to visualize how each dplyr join function works: https://www.guru99.com/r-dplyr-tutorial.html. For most purposes, you will only need left_join() and full_join(). 
+
+Stata users may also find this guide helpful: https://www.matthieugomez.com/statar/join-and-reshape.html. It provides the equivilent join expression for different types of stata merges. 
+
+Some notes on related tasks...
+
+* Appending data is usually done through rbind() or the tidyverse equivilent (bind_rows). 
+* Remeber that you can use distinct() from dplyr to remove duplicate rows. 
+
 
 ## 3.3. Save combined data
 ```{r}

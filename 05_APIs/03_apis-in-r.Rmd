@@ -349,6 +349,8 @@ Replicate the above analysis of impeachment stories in part 2 using the `rtimes`
 pacman::p_load(
   nytimes #nyt api search
 )
+
+nytimes::nyt_search()
 ```
 
 

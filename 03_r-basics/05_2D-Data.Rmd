@@ -238,39 +238,30 @@ The conversion rules for `cbind()` are complicated and best avoided by ensuring 
 1.  Create a 3x2 data frame called `basket`. The first column should contain the names of 3 fruits. The second column should contain the price of those fruits. 
 
 ```{r eval = FALSE}
-
-fruit = c("starfruit", "boysenberries", "lychee")
-price = c(.89, .99, 1.00)
-
+# Save vectors 
+  fruit = c("starfruit", "boysenberries", "lychee")
+  price = c(.89, .99, 1.00)
+# Create df as 
 basket <- data.frame(_____, ______) # add your vectors here
 class(basket)
-
-data.frame(fruit = c("starfruit", "boysenberries", "lychee"), price = c(.89, .99, 1.00))
-
-basket
-
-names(basket)
-colnames(basket)
 ```
 
 2. Now give your dataframe appropriate column and row names.
 
 ```{r eval = FALSE}
-names(basket) <- c("name", "price")
-names(basket)
-
+# Assign names to basket
+  names(basket) <- c(__________, ________)
+# Check
+  names(basket)
 ```
 
 3. Add a third column called `color`, that tells me what color each fruit is.
 
 ```{r eval = FALSE}
-
-color = c("_______", "_______", "_______")
-
-data.frame(basket, color)
-
-cbind(basket, color)
-
+# create color column
+  color = c("_______", "_______", "_______")
+# Add to existing data frame
+  # ADD CODE HERE
 ```
 
 ### 3.2 Quiz {.tabset}
