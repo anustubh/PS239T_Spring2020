@@ -39,7 +39,7 @@ text <- tesseract::ocr(pngfile[1],engine=eng)
 #Get the name from the PDF file
 file_name=gsub('^(.*).pdf','\\1',pdf_file)
 #Create a file name that will be created in your local directory
-file_path=paste(working_dir,file_name,'_3.txt',sep='')
+file_path=paste(working_dir,file_name,'_1.txt',sep='')
 #write the text file 
 write.table(text,file_path,row.names=F,col.names=F,quote=F,fileEncoding="UTF-8")
 
