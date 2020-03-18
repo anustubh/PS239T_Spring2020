@@ -10,7 +10,7 @@ import pytesseract
 from PIL import Image
 
 ##Point towards the image file
-Image_File='C:/Users/anust/Dropbox/Mac/Documents/Courses/PS239_T/Examples/Tesseract/INFO_Q1 2019 Market Medians Report_1.png'
+Image_File='C:/Users/anust/Dropbox/Mac/Documents/Courses/PS239T_Spring2020/08_data-cleaning/01_class1/INFO_Q1 2019 Market Medians Report_1.png'
 ##read the image file
 img=Image.open(Image_File)
 

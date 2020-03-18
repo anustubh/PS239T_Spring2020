@@ -9,7 +9,7 @@ rm(list=ls())
 library(tesseract)
 library(pdftools)
 
-working_dir='C:/Users/anust/Dropbox/Mac/Documents/Courses/PS239_T/Examples/Tesseract/'
+working_dir='C:/Users/anust/Dropbox/Mac/Documents/Courses/PS239T_Spring2020/08_data-cleaning/01_class1/'
 
 ##Set working directory 
 ##Note: Saving frequenty used paths as variables is a good programming practice
@@ -20,8 +20,9 @@ pdf_file<-list.files(working_dir,"*.pdf")
 
 #This is a generic code but right now I am selecting the Pdf file with 
 #English content
-pdf_file_spanish=pdf_file[1]
-pdf_file=pdf_file[2]
+pdf_file_hindi=pdf_file[1]
+pdf_file_spanish=pdf_file[2]
+pdf_file=pdf_file[3]
 
 #down the library of the language that you are converting 
 tesseract_download('eng')
@@ -38,7 +39,7 @@ text <- tesseract::ocr(pngfile[1],engine=eng)
 #Get the name from the PDF file
 file_name=gsub('^(.*).pdf','\\1',pdf_file)
 #Create a file name that will be created in your local directory
-file_path=paste(working_dir,file_name,'_1.txt',sep='')
+file_path=paste(working_dir,file_name,'_3.txt',sep='')
 #write the text file 
 write.table(text,file_path,row.names=F,col.names=F,quote=F,fileEncoding="UTF-8")
 
@@ -55,13 +56,12 @@ spanish <- tesseract("spa")
 pngfile_spanish <- pdftools::pdf_convert(paste(working_dir,pdf_file_spanish,sep=''), dpi = 600)
 
 #Take one of the image files and convert into text 
-text_spanish <- tesseract::ocr(pngfile_spanish,engine=eng)
+text_spanish <- tesseract::ocr(pngfile_spanish,engine=spanish)
 #assign name for the text file
-file_name_spanish=gsub('^(.*).pdf','\\1',pngfile_spanish)
+file_name_spanish=gsub('^(.*)_spanish.pdf','\\1',pngfile_spanish)
 #create a file path
 file_path_spanish=paste(working_dir,file_name_spanish,'.txt',sep='')
 #write the file
 write.table(text_spanish,file_path_spanish,row.names=F,col.names=F,quote=F,fileEncoding="UTF-8")
 
 
-#Exercise Hindi PDF 
