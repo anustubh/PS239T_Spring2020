@@ -65,22 +65,21 @@ fl_shootings %>% glimpse()
 
 # Now, let's choose some examples 
 
+fl_shootings %>%
+  summarise(fatality_mean = mean(fatality, na.rm=T),
+            fatality_sd = sd(fatality, na.rm=T))
 
 
+fl_shootings %>% 
+  group_by(race) %>%
+  summarise(n=round(n()/nrow(fl_shootings)*100, 1),
+            fatality=mean(fatality, na.rm=T)) 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+fl_shootings %>% 
+  group_by(race) %>%
+  summarise(n=n()/nrow(fl_shootings)*100,
+            fatality=mean(fatality, na.rm=T)) 
 
 
 ```
@@ -102,12 +101,12 @@ freqTable <- function(datName, x){
     print()
 }
 
-freqTable(fl_shootings,'weapon_choices')
+eval(parse(text="freqTable(fl_shootings,'weapon_choices')"))
 ```
 
 More generally, you can run any R code saved as a character string `t` using `eval(parse(text=t))`:
 ```{r}
-freqTable <- function(datName,x){
+freqTable <- function(datName, x){
   # Group by x
   txt <- paste0("datName %<>% group_by(",x,")") 
   eval(parse(text=txt))
@@ -142,7 +141,7 @@ weapon_by_year %>%
 # Restack data 
 weapon_by_year %>% 
   spread(key=year, value=total) %>%
-  gather(key=year, value=total, -weapon_choices)
+  gather(key=year_new, value=total_new, -weapon_choices)
 ```
 
 # 5) PRETTY TABLES

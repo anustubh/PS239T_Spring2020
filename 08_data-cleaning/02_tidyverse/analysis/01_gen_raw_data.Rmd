@@ -99,7 +99,7 @@ people %>% glimpse()
 ### 3.1.2. Standardize id and name vars
 ```{r}
 # Clarify case id 
-cases %<>% rename(case_id = id) 
+cases %<>% dplyr::rename(case_id = id) 
 
 # Clarify city id and city name vars
 cities %<>% 

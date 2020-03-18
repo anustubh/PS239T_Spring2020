@@ -124,11 +124,11 @@ fl_shootings %>% select(date, date_orig, year) %>% glimpse()
 # Add variable with total people shot in city in year 
 fl_shootings %<>%
   group_by(city_id, year) %>%
-  mutate(total_people_city_year = n()) %>% 
+  mutate(total_people_city_year = n() ) %>% 
   ungroup()
 
 # Check aggregation 
-fl_shootings %>% select(city_id, year, total_people_city_year) %>% 
+fl_shootings %>% select(id, city_id, year, total_people_city_year) %>% 
   sample_n(100) %>% arrange(city_id, year)
 ```
 
@@ -161,10 +161,13 @@ fl_shootings %>% distinct(weapon_choices, weapon_cat)
 fl_shootings %<>% 
   mutate(black = ifelse(race=="Blk", 1, 0),
          white = ifelse(race=="Wh", 1, 0),
-         other_race = ifelse(!race %in% c("Blk", "Wh"), 1, 0))
+         other_race = ifelse(!race %in% c("Blk", "Wh"), 1, 0),
+         other_race = ifelse(is.na(race), NA, other_race) )
 
 # Check types & preview 
 fl_shootings %>% select(race, white, black, other_race) %>% sample_n(30)
+
+distinct(fl_shootings, race, black, white, other_race)
 ```
 
 

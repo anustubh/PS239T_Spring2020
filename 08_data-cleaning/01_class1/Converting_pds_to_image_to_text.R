@@ -64,5 +64,3 @@ file_name_spanish=gsub('^(.*)_spanish.pdf','\\1',pngfile_spanish)
 file_path_spanish=paste(working_dir,file_name_spanish,'.txt',sep='')
 #write the file
 write.table(text_spanish,file_path_spanish,row.names=F,col.names=F,quote=F,fileEncoding="UTF-8")
-
-
