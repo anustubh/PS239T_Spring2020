@@ -1,6 +1,7 @@
-##This file uses pdftools to convert pdf (Transfer Orders) to image
+##This file uses pdftools to convert pdf to image
 ##and then tesseract to convert the image to text 
-##Author Anustubh Agnihotri
+##Author Anustubh Agnihotri For Spring 2020 Course 
+
 ##This introduction will walk you through a basic introduction to the tesseract library
 ##and will include conversion from english and non-english language 
 
@@ -52,7 +53,7 @@ write.table(text,file_path,row.names=F,col.names=F,quote=F,fileEncoding="UTF-8")
 tesseract_download('spa')
 #we have chosen spanish
 spanish <- tesseract("spa")
-#convert the 
+#convert the file
 pngfile_spanish <- pdftools::pdf_convert(paste(working_dir,pdf_file_spanish,sep=''), dpi = 600)
 
 #Take one of the image files and convert into text 
