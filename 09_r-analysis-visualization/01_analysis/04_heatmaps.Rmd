@@ -1,0 +1,284 @@
+---
+title: 'Heatmaps with ggplot'
+author: "PS239T"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    df_print: paged
+    theme: flatly
+    highlight: pygments
+---
+
+# Purpose
+
+This document describes a simple way of using `ggplot` to make heatmaps in R. Note that there are many dedicated heatmap packages in R that are not included in this tutorial. 
+
+Thanks to Tara Chandra for letting me use her R code in this tutorial. 
+
+
+***************************************************
+# 1) SET UP 
+
+## 1.1. General Set Up 
+
+```{r}
+### Clear global environment
+rm(list=ls()) 
+
+# check working directory
+getwd()
+
+# Unload all packages 
+library(pacman)
+pacman::p_unload(all)
+
+# Add packages 
+pacman::p_load(
+  tidyverse, #ggplot, dplyr, readr, etc.
+  magrittr, #piping
+  viridis, #great colors
+  WDI #world bank data package
+)
+```
+
+### 1.3. Visualization set up  
+```{r}
+# Change default plot dimensions
+knitr::opts_chunk$set(fig.width=12, fig.height=8)
+
+# Load themes
+source("../06_setup/visualisation.R")
+```
+
+
+**********************************************************
+# 2) GET DATA
+
+## 2.1. Get world bank data from api
+
+```{r}
+# Choose indicators related to women 
+vars_to_get <-  c("SH.STA.MMRT", #Maternal mortality ratio (modeled estimate, per 100,000 live births)
+                  "SH.STA.BRTC.ZS", #Births attended by skilled health staff (% of total)
+                  "SP.POP.BRTH.MF", #Sex ratio at birth (male births per female births)
+                  "SP.ADO.TFRT", #Adolescent fertility rate (births per 1,000 women ages 15-19)
+                  "SH.DYN.MORT", #Mortality rate, under-5 (per 1,000 live births)
+                  "SP.DYN.IMRT.IN", #Mortality rate, infant (per 1,000 live births)
+                  "SE.ENR.PRIM.FM.ZS", #School enrollment, primary (gross), gender parity index (GPI)
+                  "SE.ENR.SECO.FM.ZS", #School enrollment, secondary (gross), gender parity index (GPI)
+                  "SE.ENR.TERT.FM.ZS", #School enrollment, tertiary (gross), gender parity index (GPI)
+                  "SH.STA.ANVC.ZS", #Pregnant women receiving prenatal care (%)
+                  "SP.M15.2024.FE.ZS" #Women who were first married by age 15 (% of women ages 20-24)
+                  )
+
+
+
+# Download data from world bank 
+wb_dat <- WDI(country="all", 
+              indicator=vars_to_get,
+              start=2000,
+              end=2017)
+```
+
+## 2.2. Save raw data 
+```{r}
+write_csv(wb_dat, path="../02_data/data-raw/wb-data.csv")
+```
+
+## 2.3. Clean data
+```{r}
+# Read from csv (optional)
+wb_dat <- read_csv("../02_data/data-raw/wb-data.csv")
+
+# Rename variables 
+wb_dat %<>%
+  rename(mat_mort = SH.STA.MMRT,
+         skilled_birth  = SH.STA.BRTC.ZS,
+         births_sex_ratio = SP.POP.BRTH.MF,
+         adolescent_fert = SP.ADO.TFRT,
+         mort_rate_under5 = SH.DYN.MORT,
+         mort_rate_infant = SP.DYN.IMRT.IN,
+         education1 = SE.ENR.PRIM.FM.ZS,
+         education2 = SE.ENR.SECO.FM.ZS,
+         education3 = SE.ENR.TERT.FM.ZS,
+         prenatal = SH.STA.ANVC.ZS,
+         child_marriage_15 = SP.M15.2024.FE.ZS #note only among women ages 20-24
+         )
+
+# Convert country names to lowercase 
+wb_dat %<>%
+  mutate(country = str_to_lower(country))
+```
+
+```{r}
+wb_dat %>% distinct(country)
+```
+
+## 2.5. Subset countries 
+```{r}
+# Countries in south asia 
+south_asia <- c("afghanistan", "bangladesh", "bhutan", 
+                "maldives", "nepal", "india", "pakistan", "sri lanka")
+
+# Countries in west africa
+west_africa <- c("benin", "burkina faso", "cape verde", "cote divoire", 
+                 "ghana", "mali", "mauritania", "niger", "nigeria", 
+                 "senegal", "sierra leone", "togo")
+```
+
+
+**********************************************************
+# 3) HEATMAPS
+
+## 3.1. Making heatmaps with geom_tile() 
+
+We can use `geom_tile` to make heatmaps using ggplot. 
+
+The default formatting doesn't look very good... 
+```{r}
+# Maternal Mortality in South Asia 
+wb_dat %>%
+  # Filter for select countries
+  filter(country %in% south_asia) %>% 
+  # Make plot 
+  ggplot(aes(x=year, y=country, fill=mat_mort)) + 
+    geom_tile(color = NA) 
+```
+
+But once we fix the colors, theme, and titles, the plot starts to look a lot better. 
+```{r}
+# Maternal Mortality in South Asia 
+wb_dat %>%
+  # Filter for select countries
+  filter(country %in% south_asia) %>% 
+  # Make plot 
+  ggplot(aes(x=year, y=country, fill=mat_mort)) + 
+    geom_tile(color = NA) +
+    scale_fill_viridis(alpha = 1, begin = 0, end = 1, 
+                       direction = -1, discrete = FALSE, option = "A", 
+                       name = "Key:") +
+    ylab(NULL) + xlab(NULL) + 
+    ggtitle("Maternal Mortality (per 100,000)", subtitle="Source: World Bank") +
+    theme_ed +  #thanks ed!
+    theme(legend.position = "right") #change only legend position 
+
+# Save plot 
+ggsave(filename="../03_plots/example-heatmap.pdf")
+```
+
+## 3.2. Challenge 1
+
+Try changing elements of the heatmap below 
+```{r, eval=FALSE}
+wb_dat %>%
+  # Filter for select countries
+  filter(country %in% south_asia) %>% #change subset
+  # Make plot 
+  ggplot(aes(x=year, y=country, fill=mat_mort)) + #CHANGE FILL VARIABLE
+    geom_tile(color = NA) +
+    scale_fill_viridis(alpha = 1, begin = 0, end = 1, 
+                       direction = -1, discrete = FALSE, option = "D", #change scale options
+                       name = "Key:") +
+    ylab(NULL) + xlab(NULL) + 
+    ggtitle("Maternal Mortality (per 100,000)") + #change title to match varaible 
+    theme_ed + theme(legend.position = "right") 
+
+# Save plot 
+ggsave("[ADD CODE]")
+```
+
+## 3.3. (Optional) Callenge 2
+
+Write a function that creates a heatmap for a given variable and region. 
+
+```{r}
+# ADD CODE
+```
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+Answer to challenge 2
+
+```{r}
+# # Test arguments (Comment Out)
+# dat = wb_dat
+# country_sub = south_asia
+# fill_var = "mat_mort"
+# var_title = "Maternal Mortality"
+# var_scale = "per 100,000"
+
+# Function 
+gen_heatmap_wb <- function(dat, country_sub=NULL, fill_var, var_title, var_scale=NULL)
+{
+  # Filter for select countries 
+  if(!is.null(country_sub)){ #test if country subset is selected
+    dat %<>% filter(country %in% country_sub)
+  }
+  
+  # Generate plot title 
+  if(!is.null(var_scale)){
+    plot_title <- paste0(var_title, " (", var_scale, ")")
+  } else {
+    plot_title <- var_title 
+  }
+  
+  # Create heatmap 
+  dat %>%
+    ggplot(aes_string(x="year", y="country", fill=fill_var)) + #CHANGE FILL VARIABLE
+      geom_tile(color = NA) +
+      scale_fill_viridis(alpha = 1, begin = 0, end = 1, 
+                         direction = -1, discrete = FALSE, option = "D", #change scale options
+                         name = "Key:") +
+      ylab(NULL) + xlab(NULL) + 
+      ggtitle(plot_title) + 
+      theme_ed + theme(legend.position = "right") 
+}
+
+# Tests 
+gen_heatmap_wb(dat = wb_dat, 
+               country_sub = south_asia, 
+               fill_var = "mat_mort", 
+               var_title = "Maternal Mortality",
+               var_scale = "per 100,000")
+
+gen_heatmap_wb(dat = wb_dat, 
+               country_sub = west_africa, 
+               fill_var = "mort_rate_under5", 
+               var_title = "Child (under 5) Mortality Rate",
+               var_scale = "per 1,000 live births")
+
+gen_heatmap_wb(dat = wb_dat, 
+               fill_var = "mort_rate_under5", 
+               var_title = "Child (under 5) Mortality Rate")
+```
+
+
+
+
+
+
+
+
+
+
