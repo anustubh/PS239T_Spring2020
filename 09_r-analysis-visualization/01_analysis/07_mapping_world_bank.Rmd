@@ -27,11 +27,13 @@ p_load(tidyverse, data.table, rmarkdown, knitr, tinytex, magrittr,
        rgdal, tmap, 
        maptools, tmaptools,
        wbstats, WDI, #use to download world bank data
-       sf, rnaturalearth
+       sf, 
+       rnaturalearthdata #shapefile for world map
        )
 ```
 Notes:
-*Not all of these packages are used in this file. In general, it's not a good idea to have a bunch of extra packages (sometimes two packages have a function with the same name, which causes chaos). However, I don't remember which ones are necessary.
+
+* Not all of these packages are used in this file. In general, it's not a good idea to have a bunch of extra packages (sometimes two packages have a function with the same name, which causes chaos). However, I don't remember which ones are necessary.
 
 
 ****************************************************
@@ -51,8 +53,9 @@ world_geo_tidy <- data.table(broom::tidy(world_geo))
 world_geo_tidy %>% head()
 ```
 Note(s):
-*In general, it's bad practice to turn off warnings for a chunk, but I've done so here because printing the warnings makes R take (a lot) longer. This warning is only about coercing factors and characters. 
-*For chunk options, see https://rmarkdown.rstudio.com/lesson-3.html
+
+* In general, it's bad practice to turn off warnings for a chunk, but I've done so here because printing the warnings makes R take (a lot) longer. This warning is only about coercing factors and characters. 
+* For chunk options, see https://rmarkdown.rstudio.com/lesson-3.html
 
 ## 2.3. Crosswalk for census id and FIPS 
 ```{r}
@@ -60,7 +63,7 @@ Note(s):
 crosswalk <- world_geo@data
 
 # Save row IDs in a column 
-crosswalk <- cbind(id=rownames(crosswalk),crosswalk)
+crosswalk <- cbind(id=rownames(crosswalk), crosswalk)
 ```
 
 
@@ -102,8 +105,10 @@ selectvars <- c(
   "SG.VAW.ARGU.ZS")
 ```
 
-## 3.2. Two packages
-```{r}
+## 3.2. Detour: How to evalute packages
+
+There are at least two packages for downloading world bank data directly into R: 
+```{r, eval=F}
 ?wb
 ?WDI
 ```
@@ -112,7 +117,7 @@ wb() - This function downloads the requested information using the World Bank AP
 
 WDI() - Downloads the requested data by using the World Bank's API, parses the resulting XML file, and formats it in long country-year format.
 
-## 3.3. Download data
+### 3.2.1. Download data
 ```{r}
 # Use wbstats
 wb_wb <- wbstats::wb(country = "countries_only", 
@@ -129,7 +134,7 @@ wb_WDI <- WDI::WDI(country="all",
                    )
 ```
 
-## 3.3. Compare Packages
+### 3.2.2. Compare Packages
 
 wb() dropped one variable (SP.M15.2024.FE.ZS), but overall, seems like a better package. It has more options, and better country subsetting abilities. 
 ```{r}
@@ -141,9 +146,9 @@ WDI() is more limited overall, but successfully downloaded all variables.
 wb_WDI %>% glimpse()
 ```
 
-## 3.4. Select Package Results
+## 3.3. Select world bank data to map
 ```{r}
-# Rename selected results
+# (Optional) Rename selected results 
 wb_dat <- wb_wb
 
 # Drop other results

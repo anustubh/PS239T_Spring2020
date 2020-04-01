@@ -34,7 +34,8 @@ p_load(tidyverse, data.table, rmarkdown, knitr, tinytex, magrittr,
        )
 ```
 Notes:
-*Not all of these packages are used in this file. In general, it's not a good idea to have a bunch of extra packages (sometimes two packages have a function with the same name, which causes chaos). However, I don't remember which ones are necessary... 
+
+* Not all of these packages are used in this file. In general, it's not a good idea to have a bunch of extra packages (sometimes two packages have a function with the same name, which causes chaos). However, I don't remember which ones are necessary... 
 
 ## 1.3. Census API
 ```{r}
@@ -49,8 +50,9 @@ tidycensus::census_api_key(key = census_api_key,
                            install = FALSE)
 ```
 Notes: 
-*Get API Key here: https://api.census.gov/data/key_signup.html
-*PLEASE DO NOT use my API key regularly or circulate this document without deleting my key. For teaching purposes, I have left it in here. 
+
+* Get API Key here: https://api.census.gov/data/key_signup.html
+* PLEASE DO NOT use my API key regularly or circulate this document without deleting my key. For teaching purposes, I have left it in here. 
 
 
 
@@ -60,8 +62,9 @@ Notes:
 
 ## 2.1. Types of data
 There are two basic types of spatial: *vector* and *raster*. 
-*Vector data include points, lines, and polygons-the things generally contained in files called shapefiles. 
-*Raster data are comprised of single raster layers and raster stacks (stacks of raster layers) and are essentially images-values mapped to a grid. We will use the tidycensus package later to download raster data. 
+
+* Vector data include points, lines, and polygons-the things generally contained in files called shapefiles. 
+* Raster data are comprised of single raster layers and raster stacks (stacks of raster layers) and are essentially images-values mapped to a grid. We will use the tidycensus package later to download raster data. 
 
 ## 2.2. What is a shapefile?
 You will generally encounter *vector* data as shapefiles (extension .shp). However, you will also encounter vectors as datasets of points that include the coordinates of observations and some information about those points (often  .csv). At their core, all vector files are simply collections of points. For points-based files, this statement is obvious. Lines and polygons are collections of points, so again, we see that the classes of objects that make up vectors are "simply" collections of points.
@@ -103,16 +106,6 @@ US_counties@data %>% head()
 ```
 
 Most of the other slots aren't particularly interesting. 
-```{r}
-# 'plotOrder' slot
-US_counties@plotOrder %>% head()
-
-# 'bbox' slot
-US_counties@bbox
-
-# 'proj4string' slot
-US_counties@proj4string
-```
 
 However, the polygons slot is (1) a huge list, and (2) important. 
 ```{r}
@@ -133,9 +126,10 @@ US_counties_tidy <- data.table(broom::tidy(US_counties))
 US_counties_tidy %>% head()
 ```
 Note(s):
-*In general, it's bad practice to turn off warnings for a chunk, but I've done so here because printing the warnings makes R take (a lot) longer. This warning is only about coercing factors and characters. 
-*For chunk options, see https://rmarkdown.rstudio.com/lesson-3.html
-*FIPS codes are a common way to identify US counties and merge county-level data across datasets
+
+* In general, it's bad practice to turn off warnings for a chunk, but I've done so here because printing the warnings makes R take (a lot) longer. This warning is only about coercing factors and characters. 
+* For chunk options, see https://rmarkdown.rstudio.com/lesson-3.html
+* FIPS codes are a common way to identify US counties and merge county-level data across datasets
 
 ## 2.6. Crosswalk for census id and FIPS 
 ```{r}
@@ -150,7 +144,8 @@ county_data %<>% as_tibble() %>%
   mutate(FIPS = as.character(paste0(STATE,COUNTY)))
 ```
 Note(s):
-*Note that sometimes state and county FIPS codes are stored in seperate columns. I usually create a standardized version of them. Here I have saved the code as a 5 digit character variable. You could save it as a numeric vector, especially if your computer is acting slow. Just make sure to make the variable the same data type in all datasets matched with the shape file. 
+
+* Note that sometimes state and county FIPS codes are stored in seperate columns. I usually create a standardized version of them. Here I have saved the code as a 5 digit character variable. You could save it as a numeric vector, especially if your computer is acting slow. Just make sure to make the variable the same data type in all datasets matched with the shape file. 
 
 ## 2.7. County and State Borders
 ```{r}
@@ -163,7 +158,35 @@ map_state <- ggplot2::map_data("state")
 data(state)
 ```
 Note(s):
-*This might not get used anywhere in this dataset, but this base R dataset is useful when converting state name variables and matching between datasets with different state name formatting or abbreviations. 
+
+* This might not get used anywhere in this dataset, but this base R dataset is useful when converting state name variables and matching between datasets with different state name formatting or abbreviations. 
+
+## 2.9. Summary of Shapefile prep
+```{r, message = FALSE, warning = FALSE}
+### Download USDA shapefile
+setwd("../02_data/data-raw/Shapefile/")
+US_counties <- rgdal::readOGR(dsn=".",layer="gz_2010_us_050_00_5m",
+                              stringsAsFactors=FALSE)
+
+### Dataset part 1: lat-long coordinates and shapefile IDs
+
+# Save 'tidy' version of shapefile 
+US_counties_tidy <- data.table(broom::tidy(US_counties)) 
+
+### Dataset part 2: geography names, stardard ID vars like FIPS, and shapefile IDs
+
+# Save row IDs in a column 
+county_data <- 
+  # Combine shapefile IDs with names 
+  cbind(id=rownames(county_data), #shapefile IDs
+        US_counties@data) %>% #names 
+  mutate(id = as.character(id)) %>%
+  # Verify class
+  as_tibble() %>%
+  # Verify class of FIPS variable 
+  mutate(FIPS = as.character(paste0(STATE,COUNTY)))
+```
+
 
 
 ****************************************************
@@ -178,7 +201,8 @@ racevars <- c(White = "P005003",
               Hispanic = "P004003")
 ```
 Note(s):
-*Finding the right numbers for census variables can be difficult. 
+
+* Finding the right numbers for census variables can be difficult. 
 
 ## 3.2. Download Census Data
 ```{r}
@@ -194,7 +218,8 @@ race_data_county <-
   # Standardize name and class of id variable 
     mutate(FIPS = as.character(GEOID))
 ```
-Note(s): 
+Note(s):
+
 *Use get_acs() to get american community survey data 
 *Can select different geographic units: https://www2.census.gov/geo/pdfs/reference/geodiagram.pdf. See also https://walkerke.github.io/tidycensus/articles/basic-usage.html.
 *P001001 is the total population variable from the census: https://www.socialexplorer.com/data/C2000/metadata/?ds=SF1&var=P001001.
@@ -212,29 +237,29 @@ race_data <- race_data_county %>%
     dplyr::mutate_at(vars(Asian:black_hispanic),
                      .funs=funs(pct=./summary_value))
 ```
-Note(s): 
-*mutate_at() is a very powerful dplyr function. It can save you tons of time. 
+Note(s):
+
+* mutate_at() is a very powerful dplyr function. It can save you tons of time. 
 
 
 ****************************************************
 # 4) COMBINE CENSUS w/ SHAPEFILE
 
-## 4.1. Use crosswalk to merge race data with shapefile IDs
+## 4.1. Use crosswalk(s) to merge race data with geography
 ```{r}
+# Merge race data with shapefile IDs
 race_data_wID <- left_join(x = county_data, 
                            y = race_data, 
                            by = "FIPS")
-```
 
-## 4.2. Merge census data with shapefile 
-```{r}
 # Merge census data with map dataframe 
 map_df <- left_join(x = US_counties_tidy, 
                     y = race_data_wID, 
                     by = "id")
 ```
 Note(s): 
-*You can merge any dataset with the shapefile to get a graph. Here we have used the census API, but you could easily replace race_data above with any other county-level dataset. If you use a different geography, you would need to merge it with the shapefile differently, or use the tidycensus download geometry option. 
+
+* You can merge any dataset with the shapefile to get a graph. Here we have used the census API, but you could easily replace race_data above with any other county-level dataset. If you use a different geography, you would need to merge it with the shapefile differently, or use the tidycensus download geometry option. 
 
 # 4.3. Subset to mainland USA
 ```{r}
@@ -243,8 +268,8 @@ map_df_usa <- map_df %>%
   filter(!STATE %in% c("02","15","72"))
 ```
 Note(s): 
-*R can plot these areas, but it doesn't look very good. Try commenting out this section and see what it does (note: you may have to tweak the dataset name below for it to run). 
 
+* R can plot these areas, but it doesn't look very good. Try commenting out this section and see what it does (note: you may have to tweak the dataset name below for it to run). 
 
 ****************************************************
 # 5) GENERATE MAPS
@@ -345,10 +370,11 @@ map_race_fun <- function(dat, #dataset
 }
 ```
 Note(s):
-*coord_map() projects a portion of the earth, which is approximately spherical, onto a flat 2D plane. coord_quickmap() is a quick approximation that does preserve straight lines. It works best for smaller areas closer to the equator.
-*Notice that the white plot above isn't very informative. That's because there are white people pretty much everywhere (at least at a county level), and we scaled the fill colors using a log function. The log_scale option allows us to scale the white map differently. 
-*I've saved and then printed the map because it won't print to screen unless it is printed after the ggsave() function. 
-*viridis is my favorite color package at the moment. Colorbrewer is also good and has a good website, but prioritizes readability and versitility over beauty.  
+
+* coord_map() projects a portion of the earth, which is approximately spherical, onto a flat 2D plane. coord_quickmap() is a quick approximation that does preserve straight lines. It works best for smaller areas closer to the equator.
+* Notice that the white plot above isn't very informative. That's because there are white people pretty much everywhere (at least at a county level), and we scaled the fill colors using a log function. The log_scale option allows us to scale the white map differently. 
+* I've saved and then printed the map because it won't print to screen unless it is printed after the ggsave() function. 
+* viridis is my favorite color package at the moment. Colorbrewer is also good and has a good website, but prioritizes readability and versitility over beauty.  
 
 ### 5.2.1. Run function for each race category  
 ```{r}
@@ -362,15 +388,17 @@ map_df_usa %>% map_race_fun(fill_var = "White_pct", txt_var = "White",
                             log_scale=FALSE)
 ```
 Note(s): 
-*Learning how to generate maps or other plots using functions is life changing. Copying and pasting graphs is THE WORST because, inevitably, you will have to mess with the formatting later on. 
+
+* Learning how to generate maps or other plots using functions is life changing. Copying and pasting graphs is THE WORST because, inevitably, you will have to mess with the formatting later on. 
 
 
 
 ****************************************************
 # 6) ALTERNATE: sf geometry 
-*Above, we have used something called sp objects. The "newer, fancier" way to do mapping in R is to use the sf() package instead. In my experience, sf() is still very slow. 
-*tidyverse page for geom_sf(): https://ggplot2.tidyverse.org/reference/ggsf.html
-*more reference info for sf(): https://cran.r-project.org/web/packages/sf/vignettes/sf1.html
+
+* Above, we have used something called sp objects. The "newer, fancier" way to do mapping in R is to use the sf() package instead. In my experience, sf() is still very slow. 
+* tidyverse page for geom_sf(): https://ggplot2.tidyverse.org/reference/ggsf.html
+* more reference info for sf(): https://cran.r-project.org/web/packages/sf/vignettes/sf1.html
 
 ## 6.1. Download Census Data WITH GEOMETRY
 ```{r}
@@ -402,14 +430,17 @@ race_data_county2 %>%
   ggplot(aes(fill = Black_pct, color = Black_pct)) +
   geom_sf() + theme_void()
 ```
+
 Note:
-*In the past, downloading data using tidycensus takes a lot longer when "geometry=TRUE". This seems to have gotten a bit better, but the plotting is still slow. 
+
+* In the past, downloading data using tidycensus takes a lot longer when "geometry=TRUE". This seems to have gotten a bit better, but the plotting is still slow. 
 
 
 ## 6.3. Benefits
 
 ### 6.3.1. Don't have to find a shapefile 
-*Tidycensus can plot and "return an sf tibble with simple feature geometry in the 'geometry' column. state, county, tract, and block group are supported for 1990 through 2010; block and ZCTA geometry are supported for 2000 and 2010."
+
+* Tidycensus can plot and "return an sf tibble with simple feature geometry in the 'geometry' column. state, county, tract, and block group are supported for 1990 through 2010; block and ZCTA geometry are supported for 2000 and 2010."
 
 ### 6.3.2. [US Only] Tidycensus has option of shifting AK and HI
 ```{r}
