@@ -29,10 +29,10 @@ pacman::p_unload(all)
 
 # Add packages 
 pacman::p_load(
+  MASS, #boston dataset
   tidyverse, #ggplot, dplyr, readr, etc.
   magrittr, #better piping 
   viridis, #great colors
-  MASS, #boston dataset
   broom, #tidy() function
   sandwich, lmtest, #robust se 
   skimr #summarising data

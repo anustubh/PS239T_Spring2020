@@ -12,16 +12,25 @@ output:
     highlight: pygments
 ---
 
-## Purpose
+# Introduction
 
-This document shows how to use the `grid` and `gridExtra` packages to combine multiple plots. 
+This document shows how to combine plots in using two sets of packages: 
+
+1. `grid` and `gridExtra` packages (see section 3)
+2. `patchwork` package (see section 4)
+
+As a rule of thumb, `patchwork` is a newer package and easier to use (it uses syntax similar to ggplot2). The older `gridExtra` package is slightly less intuitive, but may be more flexible, especially when it comes to adding labels to the combined plot. 
+
+If you need more help with either set of packages, try the following webpages: 
+
+* This vignette shows the many advanced ways `gridExtra` can be used to combine plots and tables: https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html.
+* This vignette shows the many advanced ways `patchwork` can be used to combine plots: https://gotellilab.github.io/GotelliLabMeetingHacks/NickGotelli/ggplotPatchwork.html.
 
 For example data, it uses Anscombe's quartet: 
 
 * "Anscombe's quartet comprises four data sets that have nearly identical simple descriptive statistics, yet have very different distributions and appear very different when graphed. Each dataset consists of eleven (x,y) points. They were constructed in 1973 by the statistician Francis Anscombe to demonstrate both the importance of graphing data before analyzing it and the effect of outliers and other influential observations on statistical properties." ([source: Wikipedia](https://en.wikipedia.org/wiki/Anscombe's_quartet))
 
 Before making our plots, first do a Google image search for Anscombe's quartet. Our code will try to replicate these plots. 
-
 
 **********************************************************
 
@@ -44,10 +53,16 @@ pacman::p_unload(all)
 pacman::p_load(
   tidyverse, #ggplot, dplyr, readr, etc.
   magrittr, #piping
-  ggthemes, #extra themes
-  grid, gridExtra, #combine plots
+  grid, gridExtra, #combine plots -- option 1
+  patchwork, #combine plots -- option 2
   stats, graphics #need for anscombe's quartet data
 )
+```
+
+```{r, eval=F}
+# Difficulty downloading patchwork?
+pacman::p_load(devtools)
+install_github("thomasp85/patchwork")
 ```
 
 ## 1.2. Load data 
@@ -58,13 +73,13 @@ Anscombe's quartet is available as a built-in dataset in R.
 summary(datasets::anscombe)
 ```
 
-### 1.3. Visualization set up  
+## 1.3. Visualization set up  
 
 Notice how most Anscombe's quartet do not have gridlines. 
 
 ```{r}
 # Change default plot dimensions
-knitr::opts_chunk$set(fig.width=10, fig.height=6)
+knitr::opts_chunk$set(fig.width=6, fig.height=4)
 
 # Load themes
 source("../06_setup/visualisation.R")
@@ -78,15 +93,18 @@ theme_jc <- theme_ed +
 
 **********************************************************
 
-# 2) PLOT QUARTET
+# 2) Create seperate plots
 
-## 2.1. Generate seperate plots 
+## 2.1. Decide on formatting for single plot 
 
-First, try basic plot of x1 and y1. 
+First, try basic scatter plot of x1 and y1 with a fitted line. 
 ```{r}
 anscombe %>% 
-  ggplot(aes(x=x1, y=y1)) + 
+  # Set x and y variables
+  ggplot(aes(x=x1, y=y1)) +
+  # Add points equal to x and y coordinates
   geom_point() + 
+  # Add OLS smoothing line 
   geom_smooth(method='lm')
 ```
 
@@ -94,31 +112,49 @@ Then make it a little cleaner...
 ```{r}
 anscombe %>% 
   ggplot(aes(x=x1, y=y1)) + 
+  # Make points bigger using size argument
   geom_point(size=3) + 
-  geom_smooth(method='lm', se=FALSE, size=1.5) + 
+  # Emphasize fitted lint 
+  geom_smooth(method='lm', 
+              se=FALSE, #remove grey CI bands 
+              size=1.5 #increase line width
+              ) + 
+  # Add theme defined in section 1.3.
   theme_jc
 ```
 
-Now, modify the code so that it is a function.
+## 2.2. Functionalize single plot code 
+
+Now, modify the code so that it is a function with two arguments.
+
+1. dat: the dataset to plot (anscome in each case)
+2. num: what plot to use; note that variables are labled "x" or "y" then a number ("1", "2", "3", "4"). The function takes a number and generates the corresponding x and y variable names. For example, given num="2", the function plots x="x2" and y="y2". 
+
 ```{r}
+# Create function 
 gen_plot <- function(dat, num)
 {
   dat %>% 
+    # Set aes (note that we needed string version) 
     ggplot(aes_string(x=paste0("x",num), 
                       y=paste0("y",num)
                       )) + 
+    # Add layers using clean formatting from section 2.1.
       geom_point(size=3) + 
       geom_smooth(method='lm', se=FALSE, size=1.5) + 
       theme_jc
 }
 
+# Test plots 
 gen_plot(anscombe, num=1)
 gen_plot(anscombe, num=2)
 gen_plot(anscombe, num=3)
 gen_plot(anscombe, num=4)
 ```
 
-Save all 4 sets of x and y variables. 
+## 2.3. Generate all 4 seperate plots 
+
+Save all 4 subplots.  
 ```{r}
 a1 <- gen_plot(anscombe, num=1)
 a2 <- gen_plot(anscombe, num=2)
@@ -126,10 +162,18 @@ a3 <- gen_plot(anscombe, num=3)
 a4 <- gen_plot(anscombe, num=4)
 ```
 
+**********************************************************
 
-## 2.2. Combine plots together 
+# 3) Combine plots: grid and gridExtra 
 
-We can use `arrangeGrob()` to combine these plots together. 
+## 3.1. Basic 2x2 Quartet Plot
+
+We can print combined plots using `grid.arrange()`.
+```{r}
+grid.arrange(a1, a2, a3, a4, ncol=2)
+```
+
+We can also use `arrangeGrob()` to combine save the combined plots as an object and then print later using `grid.draw()` or `grid.arrange()`.
 ```{r}
 # Create object with combined plot 
 anscombe_quartet <- arrangeGrob(a1, a2, a3, a4,
@@ -138,31 +182,166 @@ anscombe_quartet <- arrangeGrob(a1, a2, a3, a4,
   # Title on top
   top = "Anscombe's quartet")
 
-# Print the grid the screen (Option 1)
-grid.draw(anscombe_quartet)
-
-# Print the grid the screen (Option 2)
+# Print the grid the screen 
 grid.arrange(anscombe_quartet)
+
+# Print the grid the screen (alternative function)
+grid.draw(anscombe_quartet)
 ```
 
+Note: If `grid.arrange()` doesn't work, try `grid.draw()` instead. Check on your computer, but I believe that grid.draw() does not always print in RStudio, but does appear in the knitted document. `grid.arrange()` both prints to screen in RStudio and in the knitted document.
+
 Note that we could have looped through each plot as follows, avoiding unnecessary objects and lines of code. 
-```{r, eval=FALSE}
+```{r}
 # Loop through all 4 sets of x and y variables. 
 p <- map(c(1:4), function(x) gen_plot(anscombe, x))
 
-# Check results
-p
+# Note that we can't use this list as an argument directly
+try(grid.arrange(p))
+try(grid.arrange(unlist(p)))
 
-# Combine plot 
-anscombe_quartet <- arrangeGrob(p[[1]], p[[2]], p[[3]], p[[4]],
+# Instead, I had to add each element seperately
+grid.arrange(p[[1]], p[[2]], p[[3]], p[[4]],
   # Two columns
   ncol = 2,
   # Title on top
-  top = "Anscombe's quartet")
-
-# Print the grid the screen (Option 1)
-grid.draw(anscombe_quartet)
-
-# Print the grid the screen (Option 2)
-grid.arrange(anscombe_quartet)
+  top = "Anscombe's quartet"
+  )
 ```
+
+
+## 3.2. Other advanced options for gridExtra
+
+See also http://edrub.in/ARE212/section08.html for great distribution plots using gridExtra. 
+
+We can add labels to the combined plot.
+```{r}
+# Create object with combined plot 
+grid.arrange(a1, a2, a3, a4,
+  # Two columns
+  ncol = 2,
+  # Title on top
+  top = textGrob(expression(paste(
+    "Fitted line for y = a + ", b[OLS], "x")),
+    gp = gpar(fontsize = 16, font = 3), check = T),
+  # y-axis label
+  left = textGrob("ylab here", vjust = 2, rot = 90),
+  # x-axis label
+  bottom = textGrob("xlab here", vjust = -1)
+  )
+```
+
+You can also use more complex layouts (see https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html for more details).
+```{r}
+# Create object with combined plot 
+grid.arrange(a1, a2, a3, a4,
+  widths = c(2, 1, 1),
+  layout_matrix = rbind(c(1, 2, NA),
+                        c(3, 3, 4))
+)
+```
+
+
+# 4) Combine plots: patchwork
+
+We will use plots a1, a2, a3, and a4 from section 2, so make sure you have already run the code in section 2.1. 
+
+## 3.1. Basic 2x2 Quartet Plot
+
+With `patchwork`, we use "+" and `plot_layout()` to combine plots.
+
+```{r}
+# Default
+a1 + a2 + a3 + a4
+
+# Force column or row number
+a1 + a2 + a3 + a4 + plot_layout(ncol=2, nrow=2)
+```
+
+## 3.2. Adding labels 
+
+Use `plot_annotation()` and `theme()` functions to add titles/
+```{r}
+a1 + a2 + a3 + a4 + 
+  plot_annotation(title = "Anscombe's Quartet",
+                  subtitle = 'Why you should plot your data!',
+                  caption = 'caption here'
+                  )
+```
+
+Note that you can also change the theme for the combined plot and subplots using the `&` operator and `theme()` function. 
+```{r}
+a1 + a2 + a3 + a4 + 
+  plot_annotation(title = "Anscombe's Quartet",
+                  subtitle = 'Why you should plot your data!',
+                  caption = 'caption here'
+                  ) & #note '&' operator, not '+' operator 
+  # Change theme for whole plot
+  theme(text = element_text('mono'))
+```
+
+You can label sub-plots using the tagging argument and `plot_annotation()`. 
+```{r}
+# Simple letter subplot labels
+a1 + a2 + a3 + a4 + 
+  plot_annotation(tag_levels = 'A')
+```
+
+Sub-plot labels can also follow more complicated patterns.
+```{r}
+# Simple A# labels
+a1 + a2 + a3 + a4 + 
+  plot_annotation(tag_levels = c('A', '1'))
+
+# Complex labels 
+a1 + a2 + a3 + a4 + 
+  plot_annotation(tag_levels = c('A', '1'), 
+                  tag_prefix = 'Fig. ',
+                  tag_sep = '.', tag_suffix = ':')
+```
+
+The font/size of labels adjusted using the '&' operator and the plot.tag argument for the theme() function 
+```{r}
+# Make font smaller
+a1 + a2 + a3 + a4 + 
+  plot_annotation(tag_levels = 'A') &
+  theme(plot.tag = element_text(size = 8))
+```
+
+
+
+## 3.3. Intuitive layouts
+
+The `patchwork` package also uses the operators `|` and `\` to give users greater control over layout options. Here are some examples. 
+
+```{r}
+# Example 1
+(a1 | a2 | a3) / 
+  a4
+
+# Example 2
+(a1 / 
+ a2 /
+ a3)  | a4
+```
+
+The `patchwork` vignette also outlines how to use another syntax that it calls nested layouts. Since it is more complicated and less intutive, I have not included it in this tutorial, but you may want to look at the package documentation further if the intuitive layout in this section does not meet your needs. 
+
+## 3.4. Other advanced options for patchwork
+
+We can change the relative widths of each plot:
+```{r}
+a1 + a2 + a3 + a4 + plot_layout(nrow=1, widths=c(6,1,1,3))
+```
+
+Or add a spacer plot: 
+```{r}
+a1 + a2 + plot_spacer() + a3 + a4 + plot_layout(nrow=1)
+```
+
+Lastly, the `-` operator can be used for subtrack placement. 
+```{r}
+a1 + a2 + a3 - a4 + plot_layout(ncol=1)
+```
+
+For more advanced features, see https://www.datanovia.com/en/blog/ggplot-multiple-plots-made-ridiculuous-simple-using-patchwork-r-package/#advanced-features. 

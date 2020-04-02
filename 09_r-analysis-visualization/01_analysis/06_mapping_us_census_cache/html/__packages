@@ -19,13 +19,7 @@ viridisLite
 viridis
 RColorBrewer
 scales
-maps
-mapproj
-ggmap
 sp
 rgdal
-tmap
-maptools
-tmaptools
 tidycensus
 censusapi

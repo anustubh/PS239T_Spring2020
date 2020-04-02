@@ -158,7 +158,7 @@ ggplot(data=, aes(x=, y=, by =, color=, linetype=, shape=, size=))
 In the previous challenge, you plotted lifExp over time. Using a scatterplot probably isn’t the best for visualising change over time. Instead, let's tell ggplot to visualise the data as a line plot:
 
 ```{r}
-ggplot(data = dat, aes(x=year, y=lifeExp, by=country, color=continent)) + 
+ggplot(data = dat, aes(x=year, y=lifeExp, group=country, color=continent)) + 
   geom_line()
 ```
 

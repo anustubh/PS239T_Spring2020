@@ -44,7 +44,8 @@ Notes:
 world_geo <- rnaturalearth::ne_countries(scale = 50, returnclass = "sp")
 ```
 
-## 2.2. Save tidied shapefile  
+
+## 2.2. Create object with tidied shapefile  
 ```{r, message = FALSE, warning = FALSE}
 # Create map dataframe
 world_geo_tidy <- data.table(broom::tidy(world_geo)) 
@@ -64,6 +65,9 @@ crosswalk <- world_geo@data
 
 # Save row IDs in a column 
 crosswalk <- cbind(id=rownames(crosswalk), crosswalk)
+
+# Look at data
+crosswalk %>% head()
 ```
 
 
@@ -155,6 +159,15 @@ wb_dat <- wb_wb
 rm(wb_wb, wb_WDI)
 ```
 
+```{r}
+# Save raw data
+write_csv(wb_dat, path="../02_data/data-raw/wb_gender_vars.csv")
+```
+
+```{r, eval=F}
+# Load raw data if necessary 
+wb_dat <- read_csv(path="../02_data/data-raw/wb_gender_vars.csv")
+```
 
 ****************************************************
 # 4) MERGE
