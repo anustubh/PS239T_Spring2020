@@ -101,7 +101,7 @@ Because we will be using laptops every class, the temptation to attend to other 
 
 ### Final Project
 
-The final project consists of using the tools we learned in class on your own data of interest. First- and second-year students in the political science department are encouraged to use this as an opportunity to gather data to be used for other courses or the second-year thesis. Students are required to write a short proposal by October 6 (no more than 2 paragraphs) in order to get approval and feedback from the instructors. 
+The final project consists of using the tools we learned in class on your own data of interest. First- and second-year students in the political science department are encouraged to use this as an opportunity to gather data to be used for other courses or the second-year thesis. Students are required to write a short proposal by February 24th (no more than 2 paragraphs) in order to get approval and feedback from the instructors. 
 
 During the last few classes, we will have **lightning talk sessions** where students present their projects in a maximum 5 minute talk, with 5 minutes for class Q&A. Since there is no expectation of a formal paper, you should select a project that is completable by the end of the term. In other words, submitting a research design for your future dissertation that will use skills from the class but collects no data is not acceptable, but completing a viably small portion of a study or thesis is. 
 
