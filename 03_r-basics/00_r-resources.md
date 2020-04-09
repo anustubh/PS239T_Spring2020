@@ -1,5 +1,7 @@
 # Resources for R 
 
+Note: more resources for data visualization in R can be found in the data visualization lecture subfolder. 
+
 ## The Internet 
 
 When you have a problem, google it! Pay special attention to any StackOverflow links in the search results. 
@@ -85,23 +87,50 @@ Example(s):
 * [dplyr](https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html)
 
 
-
 ## Cheat Sheets 
 
 RStudio produces and publishes 'cheat sheets' covering a wide variety of subjects. The full set can be found [here](https://www.rstudio.com/resources/cheatsheets/) (see also the RStudio GitHub page [here](https://github.com/rstudio/cheatsheets)).
 
-Some useful ones include: 
-* [Base R](https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf).
-* [Data transformation with dplyr](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
-* [Importing data with readr](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf).
+Julia's favorite cheatsheets include: 
 * [Manipulating strings with stringr](https://github.com/rstudio/cheatsheets/blob/master/strings.pdf).
-* [Regular expressions](https://github.com/rstudio/cheatsheets/blob/master/regex.pdf).
-* [Data visualization with ggplot2](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
-* [Data transformation with data.table](https://github.com/rstudio/cheatsheets/blob/master/datatable.pdf).
-* [Factors with forecats](https://github.com/rstudio/cheatsheets/blob/master/factors.pdf).
 * [Date variables with lubridate](https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf).
+
+Some useful cheatsheets for navigating baser and our programming environment: 
+* [Base R](https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf).
 * [R Markdown](https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf).
 * [R Studio](https://github.com/rstudio/cheatsheets/blob/master/rstudio-ide.pdf).
+* [R Syntax Comparison](https://github.com/rstudio/cheatsheets/blob/master/syntax.pdf)
+
+The following cheatsheets cover important tidyverse packages: 
+* [Importing data with readr](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf).
+* [Data transformation with dplyr](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
+* [Data visualization with ggplot2](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
+
+These cheatsheets are useful for manipulating text data:
+* [Regular expressions](https://github.com/rstudio/cheatsheets/blob/master/regex.pdf).
+* [Manipulating strings with stringr](https://github.com/rstudio/cheatsheets/blob/master/strings.pdf).
+* Manage and analyze text data using the [quanteda package](https://github.com/rstudio/cheatsheets/blob/master/quanteda.pdf)
+
+If you are doing machine learning or using big data, check out the following: 
+* For important and manipulating large datasets, see [Data transformation with data.table](https://github.com/rstudio/cheatsheets/blob/master/datatable.pdf).
+* For information about parallel computing in R, see [Parallel Computing](https://github.com/rstudio/cheatsheets/blob/master/parallel_computation.pdf).
+* Machine learning in R using [mlr](https://github.com/rstudio/cheatsheets/blob/master/mlr.pdf)
+* Deep learning in R using [keras](https://github.com/rstudio/cheatsheets/blob/master/keras.pdf)
+
+Other useful cheatsheets include:
+* For manipulating factor variables, use either baser functions or see [Factors with forecats](https://github.com/rstudio/cheatsheets/blob/master/factors.pdf).
+* For functions to randomize experiments, see [randomizr](https://github.com/rstudio/cheatsheets/blob/master/randomizr.pdf)
+* For embedding python code in R, see [Using Python with R with reticulate](https://github.com/rstudio/cheatsheets/blob/master/reticulate.pdf)
+* If you are familiar with Stata, check out [Stata to R](https://github.com/rstudio/cheatsheets/blob/master/stata2r.pdf). 
+
+
+
+
+
+
+
+
+
 
 
 ## (Free) Interactive Tutorials 

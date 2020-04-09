@@ -13,6 +13,8 @@ Source: https://www.computerhope.com/jargon.htm
 
 > Sidenote: You may also hear the term multi-thread processing. For our purposes, the distinction between parallel processing and multi-thread processing isn't critical. 
 
+For information about parallel computing in R, see this [cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/parallel_computation.pdf).
+
 
 ## 2. Hardware 
 
